@@ -11,40 +11,32 @@ import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import Backdrop from "@mui/material/Backdrop";
-import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
+import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 
 // user-defined components
-import { Loader } from "../components";
-import Search from "../components/Search";
+import { Loader, Search, Popup } from "../components";
 
 // utility functions
 import makeSlug from "../utils/slug";
 import getLocalStorage from "../utils/localStorage";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  width: 400,
-  bgcolor: "background.paper",
-  border: "2px solid #000",
-  boxShadow: 24,
-  p: 4,
-  backgroundColor: "#111",
-};
-
 const Home = ({ results, setResults }) => {
   const [loading, setLoading] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [open, setOpen] = useState(false);
-  const [favourites, setFavourites] = useState([]);
+  const [type, setType] = useState("");
+  const [data, setData] = useState([]);
 
   const handleOpen = () => {
-    let favourites = getLocalStorage("favourites");
-    setFavourites(favourites);
+    let names;
+    if (type === "favourites") {
+      names = getLocalStorage("favourites");
+    } else if (type === "recents") {
+      names = getLocalStorage("recents");
+    } else {
+      names = [];
+    }
+    setData(names);
     setOpen(true);
   };
   const handleClose = () => setOpen(false);
@@ -70,6 +62,22 @@ const Home = ({ results, setResults }) => {
     }
   };
 
+  const addRecents = () => {
+    let movieName = results?.Title;
+
+    let recents = getLocalStorage("recents");
+
+    if (!recents) {
+      localStorage.setItem("recents", JSON.stringify([movieName]));
+    } else {
+      if (recents?.includes(movieName)) {
+        return;
+      }
+      recents?.push(movieName);
+      localStorage.setItem("recents", JSON.stringify(recents));
+    }
+  };
+
   return (
     <>
       <header className="flex flex-col space-y-2 items-center justify-center">
@@ -77,41 +85,30 @@ const Home = ({ results, setResults }) => {
           Movie App 🎬
         </h1>
 
-        <Button sx={{ mt: 2 }} endIcon={<FavoriteIcon />} onClick={handleOpen}>
+        <Button
+          sx={{ mt: 2 }}
+          endIcon={<FavoriteIcon />}
+          onClick={() => {
+            setType("favourites");
+            handleOpen();
+          }}
+        >
           Show Favourites{" "}
+        </Button>
+
+        <Button
+          sx={{ mt: 2 }}
+          endIcon={<AccessTimeFilledIcon />}
+          onClick={() => {
+            setType("recents");
+            handleOpen();
+          }}
+        >
+          Show Recent views
         </Button>
       </header>
 
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <Fade in={open}>
-          <Box sx={style}>
-            <Typography id="transition-modal-title" variant="h6" component="h2">
-              Your favourites
-            </Typography>
-            {favourites?.map((fav, idx) => {
-              return (
-                <Typography
-                  key={idx}
-                  id="transition-modal-description"
-                  sx={{ mt: 2 }}
-                >
-                  {fav}
-                </Typography>
-              );
-            })}
-          </Box>
-        </Fade>
-      </Modal>
+      <Popup open={open} handleClose={handleClose} type={type} data={data} />
 
       <main className="mt-10 ">
         <Box
@@ -199,6 +196,7 @@ const Home = ({ results, setResults }) => {
                           size="medium"
                           variant="contained"
                           color="primary"
+                          onClick={addRecents}
                         >
                           <Link
                             to={`/movie/${makeSlug(results?.Title)}`}
