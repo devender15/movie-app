@@ -18,7 +18,6 @@ import Search from "../components/Search";
 // utility functions
 import makeSlug from "../utils/slug";
 
-
 const Home = ({ results, setResults }) => {
   const [loading, setLoading] = useState(false);
   const [searchVal, setSearchVal] = useState("");
@@ -79,6 +78,7 @@ const Home = ({ results, setResults }) => {
                 color: "white",
               },
             }}
+            disabled={searchVal.length === 0}
             endIcon={<NavigateNextOutlinedIcon />}
           >
             Search
