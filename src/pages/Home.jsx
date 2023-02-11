@@ -21,6 +21,7 @@ import Search from "../components/Search";
 
 // utility functions
 import makeSlug from "../utils/slug";
+import getLocalStorage from "../utils/localStorage";
 
 const style = {
   position: "absolute",
@@ -32,15 +33,20 @@ const style = {
   border: "2px solid #000",
   boxShadow: 24,
   p: 4,
-  backgroundColor: "#111"
+  backgroundColor: "#111",
 };
 
 const Home = ({ results, setResults }) => {
   const [loading, setLoading] = useState(false);
   const [searchVal, setSearchVal] = useState("");
   const [open, setOpen] = useState(false);
+  const [favourites, setFavourites] = useState([]);
 
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    let favourites = getLocalStorage("favourites");
+    setFavourites(favourites);
+    setOpen(true);
+  };
   const handleClose = () => setOpen(false);
 
   const handleSubmit = (e) => {
@@ -92,9 +98,17 @@ const Home = ({ results, setResults }) => {
             <Typography id="transition-modal-title" variant="h6" component="h2">
               Your favourites
             </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+            {favourites?.map((fav, idx) => {
+              return (
+                <Typography
+                  key={idx}
+                  id="transition-modal-description"
+                  sx={{ mt: 2 }}
+                >
+                  {fav}
+                </Typography>
+              );
+            })}
           </Box>
         </Fade>
       </Modal>
