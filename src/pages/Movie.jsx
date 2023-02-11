@@ -15,6 +15,9 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 
+// utility function
+import getLocalStorage from "../utils/localStorage";
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
   return <IconButton {...other} />;
@@ -28,6 +31,21 @@ const ExpandMore = styled((props) => {
 
 const Movie = ({ results }) => {
   const [expanded, setExpanded] = useState(false);
+
+  const addFavourite = () => {
+
+    console.log("added to favorites!");
+
+    let movieName = results?.Title;
+
+    let favourites = getLocalStorage("favourites");
+    if (!favourites) {
+      localStorage.setItem("favourites", JSON.stringify([movieName]));
+    } else {
+      favourites.push(movieName);
+      localStorage.setItem("favourites", JSON.stringify(favourites));
+    }
+  };
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -67,7 +85,7 @@ const Movie = ({ results }) => {
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
+            <IconButton aria-label="add to favorites" onClick={addFavourite}>
               <FavoriteIcon />
             </IconButton>
             <IconButton aria-label="share">
@@ -85,13 +103,13 @@ const Movie = ({ results }) => {
           <Collapse in={expanded} timeout="auto" unmountOnExit>
             <CardContent>
               <Typography paragraph>
-                <b> Genre </b> : {results?.Genre} 
+                <b> Genre </b> : {results?.Genre}
               </Typography>
               <Typography paragraph>
-                <b> Country </b> : {results?.Country} 
+                <b> Country </b> : {results?.Country}
               </Typography>
               <Typography paragraph>
-                <b> Director </b> : {results?.Director} 
+                <b> Director </b> : {results?.Director}
               </Typography>
               <Typography paragraph>
                 <b>Actors</b> : {results?.Actors}
