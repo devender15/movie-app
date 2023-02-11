@@ -15,6 +15,10 @@ import Typography from "@mui/material/Typography";
 import { Loader } from "../components";
 import Search from "../components/Search";
 
+// utility functions
+import makeSlug from "../utils/slug";
+
+
 const Home = ({ results, setResults }) => {
   const [loading, setLoading] = useState(false);
   const [searchVal, setSearchVal] = useState("");
@@ -134,7 +138,12 @@ const Home = ({ results, setResults }) => {
                           variant="contained"
                           color="primary"
                         >
-                          <Link to={`/movie/${results?.Title}`} className="text-white decoration-0 hover:text-white">Read more</Link>
+                          <Link
+                            to={`/movie/${makeSlug(results?.Title)}`}
+                            className="text-white decoration-0 hover:text-white"
+                          >
+                            Read more
+                          </Link>
                         </Button>
                       </CardContent>
                     </Box>
