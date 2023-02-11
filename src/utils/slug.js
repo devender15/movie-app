@@ -1,6 +1,7 @@
 const makeSlug = (text) => {
-    text = text.replace(" ", "-");
-    return text.charAt(0).toLowerCase() + text.slice(1);
+    return text.toLowerCase()
+    .replace(/[^\w ]+/g, '')
+    .replace(/ +/g, '-');
 }
 
 export default makeSlug;
