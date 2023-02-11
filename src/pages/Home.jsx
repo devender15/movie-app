@@ -64,7 +64,7 @@ const Home = () => {
           </Button>
         </Box>
 
-        <section className="mt-4">
+        <section className="mt-4 flex justify-center items-center">
           {loading && <Loader />}
           {Object.keys(results).length < 1 ? (
             <div className="mt-20">
