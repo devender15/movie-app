@@ -27,11 +27,11 @@ const Home = ({ results, setResults }) => {
   const [type, setType] = useState("");
   const [data, setData] = useState([]);
 
-  const handleOpen = () => {
+  const handleOpen = (typename) => {
     let names;
-    if (type === "favourites") {
+    if (typename === "favourites") {
       names = getLocalStorage("favourites");
-    } else if (type === "recents") {
+    } else if (typename === "recents") {
       names = getLocalStorage("recents");
     } else {
       names = [];
@@ -89,8 +89,11 @@ const Home = ({ results, setResults }) => {
           sx={{ mt: 2 }}
           endIcon={<FavoriteIcon />}
           onClick={() => {
-            setType("favourites");
-            handleOpen();
+            setType((prev) => {
+              prev = "favourites";
+              handleOpen(prev);
+              return prev;
+            });
           }}
         >
           Show Favourites{" "}
@@ -100,8 +103,11 @@ const Home = ({ results, setResults }) => {
           sx={{ mt: 2 }}
           endIcon={<AccessTimeFilledIcon />}
           onClick={() => {
-            setType("recents");
-            handleOpen();
+            setType((prev) => {
+              prev = "recents";
+              handleOpen(prev);
+              return prev;
+            });
           }}
         >
           Show Recent views
