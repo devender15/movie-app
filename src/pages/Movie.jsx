@@ -1,10 +1,14 @@
 import React from 'react'
 
-const Movie = () => {
+const Movie = ({ results }) => {
   return (
-    <div>
-      Movie
-    </div>
+    <>
+      <header>
+        <h1></h1>
+      </header>
+
+
+    </>
   )
 }
 
