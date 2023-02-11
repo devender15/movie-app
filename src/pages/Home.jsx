@@ -10,6 +10,10 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import Backdrop from "@mui/material/Backdrop";
+import Modal from "@mui/material/Modal";
+import Fade from "@mui/material/Fade";
 
 // user-defined components
 import { Loader } from "../components";
@@ -18,9 +22,26 @@ import Search from "../components/Search";
 // utility functions
 import makeSlug from "../utils/slug";
 
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+  backgroundColor: "#111"
+};
+
 const Home = ({ results, setResults }) => {
   const [loading, setLoading] = useState(false);
   const [searchVal, setSearchVal] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,11 +66,38 @@ const Home = ({ results, setResults }) => {
 
   return (
     <>
-      <header>
+      <header className="flex flex-col space-y-2 items-center justify-center">
         <h1 className="text-3xl font-semibold text-teal-500 my-2">
           Movie App 🎬
         </h1>
+
+        <Button sx={{ mt: 2 }} endIcon={<FavoriteIcon />} onClick={handleOpen}>
+          Show Favourites{" "}
+        </Button>
       </header>
+
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+      >
+        <Fade in={open}>
+          <Box sx={style}>
+            <Typography id="transition-modal-title" variant="h6" component="h2">
+              Your favourites
+            </Typography>
+            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+          </Box>
+        </Fade>
+      </Modal>
 
       <main className="mt-10 ">
         <Box
