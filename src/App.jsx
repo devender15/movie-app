@@ -11,7 +11,7 @@ function App() {
   return (
     <Routes>
       <Route exact path="/" element={<Home results={results} setResults={setResults}/>} />
-      <Route exact path="/movie/:movie-name" element={<Movie results={results} />} />
+      <Route exact path="/movie/:slug" element={<Movie results={results} />} />
     </Routes>
   );
 }
