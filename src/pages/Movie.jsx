@@ -33,17 +33,18 @@ const Movie = ({ results }) => {
   const [expanded, setExpanded] = useState(false);
 
   const addFavourite = () => {
-
-    console.log("added to favorites!");
-
     let movieName = results?.Title;
 
     let favourites = getLocalStorage("favourites");
     if (!favourites) {
       localStorage.setItem("favourites", JSON.stringify([movieName]));
     } else {
-      favourites.push(movieName);
-      localStorage.setItem("favourites", JSON.stringify(favourites));
+      if (favourites.includes(movieName)) {
+        return;
+      } else {
+        favourites.push(movieName);
+        localStorage.setItem("favourites", JSON.stringify(favourites));
+      }
     }
   };
 
