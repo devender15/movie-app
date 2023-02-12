@@ -27,6 +27,8 @@ const Home = ({ results, setResults }) => {
   const [type, setType] = useState("");
   const [data, setData] = useState([]);
 
+  const API_KEY = "";
+
   const handleOpen = (typename) => {
     let names;
     if (typename === "favourites") {
@@ -51,7 +53,7 @@ const Home = ({ results, setResults }) => {
     setLoading(true);
     try {
       const response = await fetch(
-        `http://www.omdbapi.com/?i=tt3896198&apikey=247de336&t=${searchVal}`
+        `http://www.omdbapi.com/?i=tt3896198&apikey=${API_KEY}&t=${searchVal}`
       );
       const data = await response.json();
       setResults(data);
